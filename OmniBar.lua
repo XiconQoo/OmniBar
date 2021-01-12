@@ -417,13 +417,14 @@ function OmniBar_UpdateBorders(self)
 		end
 
 		-- Set dim
-		local dim = 0
-		if self.active[i].cooldown.finish then
-			if self.active[i].cooldown.finish - GetTime() >= 0 then
-				dim = 1
-			end
+		local alpha
+		local isInactive = not self.active[i].cooldown.finish or self.active[i].cooldown.finish - GetTime() <= 0
+		if isInactive then
+			alpha = self.settings.unusedAlpha
+		else
+			alpha = 1
 		end
-		self.active[i]:SetAlpha(self.settings.unusedAlpha and 1 or dim)
+		self.active[i]:SetAlpha(alpha)
 	end
 end
 
@@ -716,12 +717,15 @@ function OmniBar_StartCooldown(self, icon, start)
 	icon.cooldown:SetCooldown(start, icon.duration)
 	icon.cooldown.finish = start + icon.duration
 	icon:SetScript("OnUpdate", function(s)
-		local dim = 0
-		if s.cooldown.finish - GetTime() >= 0 then
-			dim = 1
+		local alpha
+		local isInactive = not s.cooldown.finish or s.cooldown.finish - GetTime() <= 0
+		if isInactive then
+			alpha = self.settings.unusedAlpha
+		else
+			alpha = 1
 		end
-		s:SetAlpha(self.settings.unusedAlpha and 1 or dim)
-		--if s.cooldown.finish - GetTime() <= 0 then s:Hide() end
+		s:SetAlpha(alpha)
+		if s.cooldown.finish - GetTime() <= 0 and not self.settings.showUnused then s:Hide() end
 	end)
 	--icon.cooldown:SetSwipeColor(0, 0, 0, self.settings.swipeAlpha or 0.65)
 	icon:SetAlpha(1)
@@ -896,13 +900,14 @@ function OmniBar_UpdateIcons(self)
 		end
 
 		-- Set dim
-		local dim = 0
-		if self.icons[i].cooldown.finish then
-			if self.icons[i].cooldown.finish - GetTime() >= 0 then
-				dim = 1
-			end
+		local alpha
+		local isInactive = not self.icons[i].cooldown.finish or self.icons[i].cooldown.finish - GetTime() <= 0
+		if isInactive then
+			alpha = self.settings.unusedAlpha
+		else
+			alpha = 1
 		end
-		self.icons[i]:SetAlpha(self.settings.unusedAlpha and 1 or dim)
+		self.icons[i]:SetAlpha(alpha)
 
 		-- Masque
 		if self.icons[i].MasqueGroup then self.icons[i].MasqueGroup:ReSkin() end
