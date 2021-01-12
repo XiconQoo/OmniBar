@@ -1,11 +1,9 @@
 
 -- OmniBar by Jordon
 
-local addonName, addon = ...
-
 OmniBar = LibStub("AceAddon-3.0"):NewAddon("OmniBar", "AceEvent-3.0", "AceHook-3.0")
 
-local cooldowns = addon.Cooldowns
+local cooldowns = OmniBarAddonFrame.Cooldowns
 
 OmniBar.cooldowns = cooldowns
 
@@ -24,7 +22,7 @@ local order = {
 	["MONK"] = 12,
 }
 
-local resets = addon.Resets
+local resets = OmniBarAddonFrame.Resets
 
 -- Defaults
 local defaults = {
@@ -219,6 +217,10 @@ function OmniBar:Initialize(key, name)
 	f.numIcons = 0
 	f:RegisterForDrag("LeftButton")
 
+	if not f.anchor then f.anchor = getglobal(key.."Anchor") end
+	if not f.anchor.text then f.anchor.text = getglobal(key.."AnchorText") end
+	if not f.anchor.background then f.anchor.background = getglobal(key.."AnchorBG") end
+	if not f.container then f.container = getglobal(key.."Icons") end
 	f.anchor.text:SetText(f.settings.name)
 
 	-- Load the settings
@@ -246,6 +248,7 @@ function OmniBar:Initialize(key, name)
 	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	f:RegisterEvent("PLAYER_TARGET_CHANGED")
 	f:RegisterEvent("PLAYER_REGEN_DISABLED")
+	f:RegisterEvent("CHAT_MSG_ADDON")
 
 	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
 		f:RegisterEvent("PLAYER_FOCUS_CHANGED")
@@ -256,6 +259,7 @@ function OmniBar:Initialize(key, name)
 	f:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
 	f:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")
 
+	f:SetScript("OnEvent", OmniBar_OnEvent)
 	table.insert(self.bars, f)
 end
 
@@ -330,6 +334,23 @@ function OmniBar_CreateIcon(self)
 	local name = self:GetName()
 	local key = name.."Icon"..self.numIcons
 	local f = _G[key] or CreateFrame("Button", key, _G[name.."Icons"], "OmniBarButtonTemplate")
+	if not f.NormalTexture then f.NormalTexture = getglobal(key.."NormalTexture") end
+	if not f.flash then f.flash = getglobal(key.."Flash") end
+	if not f.TargetTexture then f.TargetTexture = getglobal(key.."TargetTexture") end
+	if not f.FocusTexture then f.FocusTexture = getglobal(key.."FocusTexture") end
+	if not f.NewItemTexture then f.NewItemTexture = getglobal(key.."NewItemTexture") end
+	if not f.Name then f.Name = getglobal(key.."Name") end
+	if not f.cooldown then f.cooldown = getglobal(key.."Cooldown") end
+	if not f.newitemglowAnim then f.newitemglowAnim = getglobal(key.."NewitemglowAnim") end
+	if not f.flashAnim then f.flashAnim = getglobal(key.."FlashAnim") end
+	if not f.icon then
+		f.icon = f:CreateTexture(nil, "BORDER")
+		f.icon:SetAllPoints(f)
+		f.Count = f:CreateFontString(nil, "OVERLAY")
+		f.Count:SetAllPoints(f)
+		f.Count:SetFont("Fonts\\ARIALN.ttf", 10, "OUTLINE")
+	end
+
 	table.insert(self.icons, f)
 end
 
@@ -396,8 +417,13 @@ function OmniBar_UpdateBorders(self)
 		end
 
 		-- Set dim
-		self.active[i]:SetAlpha(self.settings.unusedAlpha and self.active[i].cooldown:GetCooldownTimes() == 0 and not border and
-			self.settings.unusedAlpha or 1)
+		local dim = 0
+		if self.active[i].cooldown.finish then
+			if self.active[i].cooldown.finish - GetTime() >= 0 then
+				dim = 1
+			end
+		end
+		self.active[i]:SetAlpha(self.settings.unusedAlpha and 1 or dim)
 	end
 end
 
@@ -444,9 +470,11 @@ end
 
 function OmniBar_OnEvent(self, event, ...)
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		local _, event, _, sourceGUID, sourceName, sourceFlags, _,_,_,_,_, spellID, spellName = CombatLogGetCurrentEventInfo()
+		local _, eventType, sourceGUID, sourceName, sourceFlags, dstGUID, dstName, dstFlags, spellID, spellName, spellSchool, auraType, stackCount = select(1, ...)
+		--local _, event, _, sourceGUID, sourceName, sourceFlags, _,_,_,_,_, spellID, spellName = CombatLogGetCurrentEventInfo()
 		if self.disabled then return end
-		if (event == "SPELL_CAST_SUCCESS" or event == "SPELL_AURA_APPLIED") and bit.band(sourceFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) ~= 0 then
+
+		if (eventType == "SPELL_CAST_SUCCESS" or eventType == "SPELL_AURA_APPLIED") and bit.band(sourceFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) ~= 0 then
 			if spellID == 0 and spellIdByName then spellID = spellIdByName[spellName] end
 			if cooldowns[spellID] then
 				OmniBar_UpdateArenaSpecs(self)
@@ -525,6 +553,14 @@ function OmniBar_OnEvent(self, event, ...)
 				if self.detected[guid] then return end
 				self.detected[guid] = class
 				OmniBar_AddIconsByClass(self, class)
+			end
+		end
+	elseif event == "CHAT_MSG_ADDON" then
+		local prefix, message, channel, sender = ...
+		if prefix == "GladdyTrinketUsed" and sender ~= UnitName("player") then
+			if cooldowns[42292] then
+				OmniBar_UpdateArenaSpecs(self)
+				OmniBar_AddIcon(self, 42292, message, "Unknown Source")
 			end
 		end
 	end
@@ -606,7 +642,7 @@ end
 
 function OmniBar_CooldownFinish(self, force)
 	local icon = self:GetParent()
-	if icon.cooldown and icon.cooldown:GetCooldownTimes() > 0 and not force then return end -- not complete
+	if icon.cooldown and icon.cooldown.finish and icon.cooldown.finish - GetTime() > 0 and not force then return end -- not complete
 	local charges = icon.charges
 	if charges then
 		charges = charges - 1
@@ -679,7 +715,15 @@ end
 function OmniBar_StartCooldown(self, icon, start)
 	icon.cooldown:SetCooldown(start, icon.duration)
 	icon.cooldown.finish = start + icon.duration
-	icon.cooldown:SetSwipeColor(0, 0, 0, self.settings.swipeAlpha or 0.65)
+	icon:SetScript("OnUpdate", function(s)
+		local dim = 0
+		if s.cooldown.finish - GetTime() >= 0 then
+			dim = 1
+		end
+		s:SetAlpha(self.settings.unusedAlpha and 1 or dim)
+		--if s.cooldown.finish - GetTime() <= 0 then s:Hide() end
+	end)
+	--icon.cooldown:SetSwipeColor(0, 0, 0, self.settings.swipeAlpha or 0.65)
 	icon:SetAlpha(1)
 end
 
@@ -827,8 +871,8 @@ function OmniBar_AddIcon(self, spellID, sourceGUID, sourceName, init, test, spec
 	if not init then
 		OmniBar_StartCooldown(self, icon, now)
 		if self.settings.glow then
-			icon.flashAnim:Play()
-			icon.newitemglowAnim:Play()
+			--icon.flashAnim:Play()
+			--icon.newitemglowAnim:Play()
 		end
 	end
 
@@ -838,11 +882,11 @@ end
 function OmniBar_UpdateIcons(self)
 	for i = 1, self.numIcons do
 		-- Set show text
-		self.icons[i].cooldown:SetHideCountdownNumbers(not self.settings.cooldownCount and true or false)
+		--self.icons[i].cooldown:SetHideCountdownNumbers(not self.settings.cooldownCount and true or false)
 		self.icons[i].cooldown.noCooldownCount = not self.settings.cooldownCount
 
 		-- Set swipe alpha
-		self.icons[i].cooldown:SetSwipeColor(0, 0, 0, self.settings.swipeAlpha or 0.65)
+		--self.icons[i].cooldown:SetSwipeColor(0, 0, 0, self.settings.swipeAlpha or 0.65)
 
 		-- Set border
 		if self.settings.border then
@@ -852,8 +896,13 @@ function OmniBar_UpdateIcons(self)
 		end
 
 		-- Set dim
-		self.icons[i]:SetAlpha(self.settings.unusedAlpha and self.icons[i].cooldown:GetCooldownTimes() == 0 and
-			self.settings.unusedAlpha or 1)
+		local dim = 0
+		if self.icons[i].cooldown.finish then
+			if self.icons[i].cooldown.finish - GetTime() >= 0 then
+				dim = 1
+			end
+		end
+		self.icons[i]:SetAlpha(self.settings.unusedAlpha and 1 or dim)
 
 		-- Masque
 		if self.icons[i].MasqueGroup then self.icons[i].MasqueGroup:ReSkin() end

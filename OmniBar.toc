@@ -1,4 +1,4 @@
-## Interface: 90001
+## Interface: 20400
 ## Title: OmniBar
 ## Notes: Tracks enemy cooldowns
 ## Version: v10.10
@@ -18,7 +18,6 @@ Libs\AceHook-3.0\AceHook-3.0.xml
 Libs\AceGUI-3.0\AceGUI-3.0.xml
 Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\AceLocale-3.0\AceLocale-3.0.xml
-Libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 
 Locales\Locales.xml
 OmniBar.xml

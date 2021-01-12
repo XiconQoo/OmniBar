@@ -1,8 +1,7 @@
-local addonName, addon = ...
 
 if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
 
-addon.Resets = {
+OmniBarAddonFrame.Resets = {
     --[[ Cold Snap
         - Ice Barrier
         - Frost Ward
@@ -24,12 +23,22 @@ addon.Resets = {
     [14185] = { 13877, 408, 2094, 2983, 5277, 1776, 14278, 14183 },
 }
 
-addon.Cooldowns = {
+OmniBarAddonFrame.Cooldowns = {
+
+    -- Trinket
+    [42292] = {default = false, duration=120, class="DRUID"},
+    [42292] = {default = false, duration=120, class="HUNTER"},
+    [42292] = {default = false, duration=120, class="MAGE"},
+    [42292] = {default = false, duration=120, class="PALADIN"},
+    [42292] = {default = false, duration=120, class="PRIEST"},
+    [42292] = {default = false, duration=120, class="ROGUE"},
+    [42292] = {default = false, duration=120, class="SHAMAN"},
+    [42292] = {default = false, duration=120, class="WARLOCK"},
+    [42292] = {default = false, duration=120, class="WARRIOR"},
 
     -- Interrupts
-
     [16979] = { default = true, duration = 15, class = "DRUID" }, -- Feral Charge (Druid)
-    [2139] = { default = true, duration = 30, class = "MAGE" }, -- Counterspell (Mage)
+    [2139] = { default = true, duration = 24, class = "MAGE" }, -- Counterspell (Mage)
     [1766] = { default = true, duration = 10, class = "ROGUE" }, -- Kick (Rogue)
         [1767] = { parent = 1766 },
         [1768] = { parent = 1766 },

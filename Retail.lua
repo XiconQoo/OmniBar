@@ -1,115 +1,17 @@
-local addonName, addon = ...
+OmniBarAddonName, OmniBarAddonFrame = "OmniBar", CreateFrame("Frame", "OmniBarFrame")
+WOW_PROJECT_CLASSIC = "TBC"
+WOW_PROJECT_ID = "TBC"
 
 if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then return end
 
-addon.Resets = {
+OmniBarAddonFrame.Resets = {
     --[[ Grimoire: Felhunter
          - Spell Lock
       ]]
     [111897] = { 119910 },
 }
 
-addon.Cooldowns = {
-
-    -- Death Knight
-
-    [47528] = { default = true, duration = 15, class = "DEATHKNIGHT" }, -- Mind Freeze
-    [48265] = { duration = 45, class = "DEATHKNIGHT" }, -- Death's Advance
-    [48707] = { duration = 60, class = "DEATHKNIGHT" }, -- Anti-Magic Shell
-    [49576] = { duration = 25, class = "DEATHKNIGHT", charges = 2 }, -- Death Grip
-    [51052] = { duration = 120, class = "DEATHKNIGHT" }, -- Anti-Magic Zone
-    [61999] = { duration = 600, class = "DEATHKNIGHT" }, -- Raise Ally
-    [77606] = { duration = 20, class = "DEATHKNIGHT" }, -- Dark Simulacrum
-    [212552] = { duration = 60, class = "DEATHKNIGHT" }, -- Wraith Walk
-
-        -- Blood
-
-        [43265] = { duration = 30, class = "DEATHKNIGHT", specID = { 250, 252 } }, -- Death and Decay
-        [47476] = { duration = 60, class = "DEATHKNIGHT", specID = { 250 } }, -- Strangulate
-        [49028] = { duration = 120, class = "DEATHKNIGHT", specID = { 250 } }, -- Dancing Rune Weapon
-        [55233] = { duration = 90, class = "DEATHKNIGHT", specID = { 250 } }, -- Vampiric Blood
-        [108199] = { duration = 120, class = "DEATHKNIGHT", specID = { 250 } }, -- Gorefiend's Grasp
-        [194679] = { duration = 25, class = "DEATHKNIGHT", specID = { 250 }, charges = 2 }, -- Rune Tap
-        [194844] = { duration = 60, class = "DEATHKNIGHT", specID = { 250 } }, -- Bonestorm
-        [203173] = { duration = 15, class = "DEATHKNIGHT", specID = { 250 } }, -- Death Chain
-        [205223] = { duration = 45, class = "DEATHKNIGHT", specID = { 250 } }, -- Consumption
-        [206931] = { duration = 30, class = "DEATHKNIGHT", specID = { 250 } }, -- Blooddrinker
-        [206977] = { duration = 120, class = "DEATHKNIGHT", specID = { 250 } }, -- Blood Mirror
-        [219809] = { duration = 60, class = "DEATHKNIGHT", specID = { 250 } }, -- Tombstone
-        [221562] = { duration = 45, class = "DEATHKNIGHT", specID = { 250, 252 } }, -- Asphyxiate (Blood)
-            [108194] = { parent = 221562 }, -- Asphyxiate (Unholy)
-        [221699] = { duration = 60, class = "DEATHKNIGHT", specID = { 250 }, charges = 2 }, -- Blood Tap
-
-        -- Frost
-
-        [47568] = { duration = 120, class = "DEATHKNIGHT", specID = { 251 }, charges = 2 }, -- Empower Rune Weapon
-            [207127] = { parent = 47568 }, -- Hungering Rune Weapon
-        [48792] = { duration = 180, class = "DEATHKNIGHT", specID = { 251, 252 } }, -- Icebound Fortitude
-        [51271] = { duration = 45, class = "DEATHKNIGHT", specID = { 251 } }, -- Pillar of Frost
-        [152279] = { duration = 120, class = "DEATHKNIGHT", specID = { 251} }, -- Breath of Sindragosa
-        [196770] = { duration = 20, class = "DEATHKNIGHT", specID = { 251 } }, -- Remorseless Winter
-        [204143] = { duration = 45, class = "DEATHKNIGHT", specID = { 251 } }, -- Killing Machine
-        [204160] = { duration = 45, class = "DEATHKNIGHT", specID = { 251 } }, -- Chill Streak
-        [207167] = { duration = 60, class = "DEATHKNIGHT", specID = { 251} }, -- Blinding Sleet
-        [207256] = { duration = 90, class = "DEATHKNIGHT", specID = { 251} }, -- Obliteration
-        [279302] = { duration = 180, class = "DEATHKNIGHT", specID = { 251} }, -- Frostwyrm's Fury
-
-        -- Unholy
-
-        [42650] = { duration = 480, class = "DEATHKNIGHT", specID = { 252 } }, -- Army of the Dead
-        [63560] = { duration = 60, class = "DEATHKNIGHT", specID = { 252 } }, -- Dark Transformation
-        [43265] = { duration = 30, class = "DEATHKNIGHT", specID = { 252 } }, -- Death and Decay
-            [152280] = { parent = 43265 }, -- Defile
-        [47481] = { duration = 90, class = "DEATHKNIGHT", specID = { 252 } }, -- Gnaw (Ghoul)
-        [47482] = { duration = 30, class = "DEATHKNIGHT", specID = { 252 } }, -- Leap (Ghoul)
-        [49206] = { duration = 180, class = "DEATHKNIGHT", specID = { 252 } }, -- Summon Gargoyle
-            [207349] = { parent = 49206 }, -- Dark Arbiter
-        [91802] = { duration = 30, class = "DEATHKNIGHT", specID = { 252 } }, -- Shambling Rush (Ghoul)
-        [207289] = { duration = 120, class = "DEATHKNIGHT", specID = { 252 } }, -- Unholy Frenzy
-        [207319] = { duration = 60, class = "DEATHKNIGHT", specID = { 252 } }, -- Corpse Shield
-        [220143] = { duration = 90, class = "DEATHKNIGHT", specID = { 252 } }, -- Apocalypse
-
-    -- Demon Hunter
-
-    [179057] = { duration = 60, class = "DEMONHUNTER" }, -- Chaos Nova
-    [183752] = { default = true, duration = 15, class = "DEMONHUNTER" }, -- Disrupt
-    [188499] = { duration = 9, class = "DEMONHUNTER" }, -- Blade Dance
-    [188501] = { duration = 30, class = "DEMONHUNTER" }, -- Spectral Sight
-    [191427] = { duration = 105, class = "DEMONHUNTER" }, -- Metamorphosis
-        [187827] = { parent = 191427, duration = 180 }, -- Metamorphosis (Vengeance)
-        [162264] = { parent = 191427 }, -- Metamorphosis
-    [196718] = { duration = 180, class = "DEMONHUNTER" }, -- Darkness
-    [198013] = { duration = 30, class = "DEMONHUNTER" }, -- Eye Beam
-    [198793] = { duration = 25, class = "DEMONHUNTER" }, -- Vengeful Retreat
-    [203704] = { duration = 60, class = "DEMONHUNTER" }, -- Mana Break
-    [205604] = { duration = 60, class = "DEMONHUNTER" }, -- Reverse Magic
-    [206649] = { duration = 45, class = "DEMONHUNTER" }, -- Eye of Leotheras
-    [206803] = { duration = 60, class = "DEMONHUNTER" }, -- Rain from Above
-    [212800] = { duration = 60, class = "DEMONHUNTER" }, -- Blur
-        [196555] = { parent = 212800, duration = 90 }, -- Netherwalk
-    [214743] = { duration = 60, class = "DEMONHUNTER" }, -- Soul Carver
-        [207407] = { parent = 214743 }, -- Soul Carver (Vengeance)
-    [221527] = { duration = 45, class = "DEMONHUNTER" }, -- Imprison
-
-        -- Havoc
-
-        [201467] = { duration = 60, class = "DEMONHUNTER", specID = { 577 } }, -- Fury of the Illidari
-        [206491] = { duration = 120, class = "DEMONHUNTER", specID = { 577 } }, -- Nemesis
-        --[211048] = { duration = 120, class = "DEMONHUNTER", specID = { 577 } }, -- Chaos Blades
-        [211881] = { duration = 30, class = "DEMONHUNTER", specID = { 577, 581 } }, -- Fel Eruption
-
-        -- Vengeance
-
-        [202137] = { duration = 60, class = "DEMONHUNTER", specID = { 581 } }, -- Sigil of Silence
-        [202138] = { duration = 120, class = "DEMONHUNTER", specID = { 581 } }, -- Sigil of Chains
-        [204021] = { duration = 60, class = "DEMONHUNTER", specID = { 581 } }, -- Fiery Brand
-        [204596] = { duration = 30, class = "DEMONHUNTER", specID = { 581 } }, -- Sigil of Flame
-        [205629] = { duration = 30,  class = "DEMONHUNTER", specID = { 581 } }, -- Demonic Trample
-        [205630] = { duration = 90, class = "DEMONHUNTER", specID = { 581 } }, -- Illidan's Grasp
-        [207684] = { duration = 90, class = "DEMONHUNTER", specID = { 581 } }, -- Sigil of Misery
-        [207810] = { duration = 120, class = "DEMONHUNTER", specID = { 581 } }, -- Nether Bond
-        --[218256] = { duration = 20, class = "DEMONHUNTER", specID = { 581 } }, -- Empower Wards
-        [263648] = { duration = 20, class = "DEMONHUNTER", specID = { 581 } }, -- Soul Barrier
+OmniBarAddonFrame.Cooldowns = {
 
     -- Priest
 
@@ -584,53 +486,5 @@ addon.Cooldowns = {
         [209782] = { duration = 60, class = "ROGUE", specID = { 261 } }, -- Goremaw's Bite
         [212182] = { duration = 180, class = "ROGUE", specID = { 261 } }, -- Smoke Bomb
         [213981] = { duration = 45, class = "ROGUE", specID = { 261 } }, -- Cold Blood
-
-    -- Monk
-
-    [109132] = { duration = 15, class = "MONK", charges = 3 }, -- Roll
-        [115008] = { parent = 109132 }, -- Chi Torpedo
-    [115078] = { duration = 45, class = "MONK" }, -- Paralysis
-    [116841] = { duration = 30, class = "MONK" }, -- Tiger's Lust
-    [116844] = { duration = 45, class = "MONK" }, -- Ring of Peace
-    [119381] = { duration = 60, class = "MONK" }, -- Leg Sweep
-    [119996] = { duration = 45, class = "MONK" }, -- Transcendence: Transfer
-    [122278] = { duration = 120, class = "MONK" }, -- Dampen Harm
-    [122783] = { duration = 120, class = "MONK" }, -- Diffuse Magic
-    [123986] = { duration = 30, class = "MONK" }, -- Chi Burst
-    --[137648] = { duration = 120, class = "MONK" }, -- Nimble Brew
-
-        -- Brewmaster
-
-        [115203] = { duration = 105, class = "MONK", specID = { 268 } }, -- Fortifying Brew
-        [115399] = { duration = 90, class = "MONK", specID = { 268 } }, -- Black Ox Brew
-        [116705] = { default = true, duration = 15, class = "MONK", specID = { 268, 269 } }, -- Spear Hand Strike
-        [132578] = { duration = 180, class = "MONK", specID = { 268 } }, -- Invoke Niuzao, the Black Ox
-        [202162] = { duration = 45, class = "MONK", specID = { 268 } }, -- Guard
-        [202272] = { duration = 45, class = "MONK", specID = { 268 } }, -- Incendiary Brew
-        [202370] = { duration = 60, class = "MONK", specID = { 268 } }, -- Mighty Ox Kick
-
-        -- Windwalker
-
-        [101545] = { duration = 25, class = "MONK", specID = { 269 }, charges = 2 }, -- Flying Serpent Kick
-        [113656] = { duration = 24, class = "MONK", specID = { 269 } }, -- Fists of Fury
-        [115080] = { duration = 120, class = "MONK", specID = { 269 } }, -- Touch of Death
-            [152173] = { parent = 137639 }, -- Serenity
-        [115176] = { duration = 150, class = "MONK", specID = { 269 } }, -- Zen Meditation
-            [201325] = { parent = 115176, 180 }, -- Zen Meditation (Windwalker)
-        [115288] = { duration = 60, class = "MONK", specID = { 269 } }, -- Energizing Elixir
-        [122470] = { duration = 90, class = "MONK", specID = { 269 } }, -- Touch of Karma
-        [123904] = { duration = 120, class = "MONK", specID = { 269 } }, -- Invoke Xuen, the White Tiger
-        [137639] = { duration = 90, class = "MONK", specID = { 269 }, charges = 2 }, -- Storm, Earth, and Fire
-        [152175] = { duration = 24, class = "MONK", specID = { 269 } }, -- Whirling Dragon Punch
-        [201318] = { duration = 90, class = "MONK", specID = { 269 } }, -- Fortifying Elixir
-
-        -- Mistweaver
-
-        [115310] = { duration = 180, class = "MONK", specID = { 270 } }, -- Revival
-        [116680] = { duration = 30, class = "MONK", specID = { 270 } }, -- Thunder Focus Tea
-        [116849] = { duration = 120, class = "MONK", specID = { 270 } }, -- Life Cocoon
-        [197908] = { duration = 90, class = "MONK", specID = { 270 } }, -- Mana Tea
-        --[197945] = { duration = 20, class = "MONK", specID = { 270 }, charges = 2 }, -- Mistwalk
-        [198898] = { duration = 30, class = "MONK", specID = { 270 } }, -- Song of Chi-Ji
 
 }
