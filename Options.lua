@@ -129,14 +129,13 @@ local function GetSpells()
 						name = function()
 							--print( format("|T%s:20|t %s", spellTexture, spellName))
 							-- format("|T%s:20|t %s", spellTexture, spellName)
-							return format("|T%s:0|t %s", spellTexture, spellName)
+							return format("|T%s:20|t %s", spellTexture, spellName)
 						end,
 					}
 				end
 			end
 		end
 	end
-	print("GetSpells = " .. #spells)
 	return spells
 end
 
