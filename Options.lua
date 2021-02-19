@@ -54,6 +54,7 @@ local function GetSpells()
 	local spells = {
 		uncheck = {
 			name = L["Uncheck All"],
+			width = "0.4",
 			type = "execute",
 			func = function(info)
 				local key = info[#info-2]
@@ -69,6 +70,7 @@ local function GetSpells()
 		},
 		check = {
 			name = L["Check Default Spells"],
+			width = "0.4",
 			type = "execute",
 			func = function(info)
 				local key = info[#info-2]
@@ -82,7 +84,7 @@ local function GetSpells()
 				end
 				OmniBar:Refresh(true)
 			end,
-			order = 2,
+			order = 1,
 		},
 	}
 	local descriptions = {}
@@ -97,23 +99,25 @@ local function GetSpells()
 		}
 
 		for spellID, spell in pairs(OmniBar.cooldowns) do
+
 			if spell.class and spell.class == CLASS_SORT_ORDER[i] then
-				local spellName = GetSpellInfo(spellID)
+				local spellName,_,spellTexture = GetSpellInfo(spellID)
 				if spellName then
-					local spellTexture = GetSpellTexture(spellID) or ""
 					if string.len(spellName) > 25 then
 						spellName = string.sub(spellName, 0, 22) .. "..."
 					end
-					local s = Spell:CreateFromSpellID(spellID)
-					s:ContinueOnSpellLoad(function()
-						descriptions[spellID] = s:GetSpellDescription()
-					end)
+					--local s = Spell:CreateFromSpellID(spellID)
+					--s:ContinueOnSpellLoad(function()
+					--	descriptions[spellID] = s:GetSpellDescription()
+					--end)
+					descriptions[spellID] = spellName
 
 					spells[CLASS_SORT_ORDER[i]].args["spell"..spellID] = {
 						name = spellName,
 						type = "toggle",
 						get = IsSpellEnabled,
 						width = "full",
+						icon = spellTexture,
 						arg = spellID,
 						desc = function()
 							local duration = type(spell.duration) == "number" and spell.duration or spell.duration.default
@@ -123,6 +127,8 @@ local function GetSpells()
 							return spellDesc..extra
 						end,
 						name = function()
+							--print( format("|T%s:20|t %s", spellTexture, spellName))
+							-- format("|T%s:20|t %s", spellTexture, spellName)
 							return format("|T%s:20|t %s", spellTexture, spellName)
 						end,
 					}
@@ -138,7 +144,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 		name = self.db.profile.bars[key].name,
 		type = "group",
 		order = self.index + 1,
-		childGroups = "tab",
+		childGroups = "tree",
 		get = function(info)
 			local option = info[#info]
 			return self.db.profile.bars[key][option]
@@ -153,6 +159,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 				name = L["Settings"],
 				type = "group",
 				order = 10,
+				width = "half",
 				args = {
 					name = {
 						name = L["Name"],
@@ -415,6 +422,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 			position = {
 				name = L["Position"],
 				type = "group",
+				width = "half",
 				order = 11,
 				get = function(info)
 					local option = info[#info]
@@ -525,6 +533,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 			visibility = {
 				name = L["Visibility"],
 				type = "group",
+				width = "half",
 				set = function(info, state)
 					local option = info[#info]
 					self.db.profile.bars[key][option] = state
@@ -551,6 +560,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 			spells = {
 				name = L["Spells"],
 				type = "group",
+				width = "half",
 				order = 13,
 				arg = key,
 				args = GetSpells(),
@@ -564,6 +574,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 			lock = {
 				type = "execute",
 				name = self.db.profile.bars[key].locked and L["Unlock"] or L["Lock"],
+				width = "half",
 				desc = L["Lock the bar to prevent dragging"],
 				arg = key,
 				func = "ToggleLock",
@@ -573,6 +584,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 			delete = {
 				type = "execute",
 				name = L["Delete"],
+				width = "half",
 				desc = L["Delete the bar"],
 				func = function()
 					local popup = StaticPopup_Show("OMNIBAR_DELETE", self.db.profile.bars[key].name)
@@ -584,7 +596,7 @@ function OmniBar:AddBarToOptions(key, refresh)
 		},
 	}
 
-	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+	if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
 		self.options.args.bars.args[key].args.settings.args.highlightFocus = {
 			name = L["Highlight Focus"],
 			desc = L["Draw a border around your focus"],
@@ -756,12 +768,13 @@ local customSpells = {
 				end
 				OmniBar:AddCustomSpells()
 
+				local _,_,spellTexture = GetSpellInfo(spellId)
 				OmniBar.options.args.customSpells.args["spell"..spellId] = {
 					name = name,
 					type = "group",
 					childGroups = "tab",
 					args = customSpellInfo,
-					icon = GetSpellTexture(spellId),
+					icon = spellTexture,
 				}
 				OmniBar:OnEnable() -- to refresh the bar spells tab
 				LibStub("AceConfigRegistry-3.0"):NotifyChange("OmniBar")
@@ -770,7 +783,7 @@ local customSpells = {
 	},
 }
 
-if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
 	for i = 1, #specIDs do
 		local specID = specIDs[i]
 		local _, name, _, icon = GetSpecializationInfoByID(specID)
@@ -875,12 +888,13 @@ end
 function OmniBar:SetupOptions()
 
 	for spellId, spell in pairs(OmniBar.db.global.cooldowns) do
+		local _,_,spellTexture = GetSpellInfo(spellId)
 		customSpells["spell"..spellId] = {
 			name = GetSpellInfo(spellId),
 			type = "group",
 			childGroups = "tab",
 			args = customSpellInfo,
-			icon = GetSpellTexture(spellId),
+			icon = spellTexture,
 		}
 	end
 
@@ -889,11 +903,11 @@ function OmniBar:SetupOptions()
 		descStyle = "inline",
 		type = "group",
 		plugins = {
-			profiles = { profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db) }
+			profiles = { profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db) },
 		},
 		childGroups = "tab",
 		args = {
-			vers = {
+			--[[vers = {
 				order = 1,
 				type = "description",
 				name = "|cffffd700"..L["Version"].."|r "..GetAddOnMetadata("OmniBar", "Version").."\n",
@@ -904,15 +918,7 @@ function OmniBar:SetupOptions()
 				type = "description",
 				name = "|cffffd700 "..L["Author"].."|r Jordon\n",
 				cmdHidden = true
-			},
-			test = {
-				type = "execute",
-				name = L["Test"],
-				desc = L["Activate the icons for testing"],
-				order = 3,
-				func = "Test",
-				handler = OmniBar,
-			},
+			},]]
 
 			bars = {
 				name = L["Bars"],
@@ -922,11 +928,21 @@ function OmniBar:SetupOptions()
 				args = {
 					add = {
 						type = "execute",
+						width = "normal",
 						name = L["Create Bar"],
 						desc = L["Create a new bar"],
 						order = 1,
 						func = "Create",
 						handler = OmniBar,
+					},
+					test = {
+						type = "execute",
+						width = "half",
+						name = L["Test"],
+						desc = L["Activate the icons for testing"],
+						order = 2,
+						func = "Test",
+						handler = OmniBar
 					},
 				},
 			},
@@ -955,12 +971,7 @@ function OmniBar:SetupOptions()
 		},
 	}
 
-	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
-		local LibDualSpec = LibStub('LibDualSpec-1.0')
-		LibDualSpec:EnhanceDatabase(self.db, "OmniBarDB")
-		LibDualSpec:EnhanceOptions(self.options.plugins.profiles.profiles, self.db)
-	end
-
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("OmniBar", self.options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("OmniBar", "OmniBar")
+	LibStub("AceConsole-3.0"):RegisterChatCommand("omnibar", function() LibStub("AceConfigDialog-3.0"):Open("OmniBar") end)
 end

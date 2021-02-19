@@ -75,12 +75,12 @@
 			</Anchors>
 		</Anchors>
 		<Animations>
-			<AnimationGroup parentKey="newitemglowAnim" setToFinalAlpha="true">
+			<AnimationGroup name="$parentNewitemglowAnim" parentKey="newitemglowAnim" setToFinalAlpha="true">
 				<Alpha childKey="NewItemTexture" smoothing="NONE" duration="1" order="1" fromAlpha="1" toAlpha="0.4"/>
 				<Alpha childKey="NewItemTexture" smoothing="NONE" duration="1" order="2" fromAlpha="0.4" toAlpha="1"/>
 				<Alpha childKey="NewItemTexture" smoothing="NONE" duration="1" order="3" fromAlpha="1" toAlpha="0"/>
 			</AnimationGroup>
-			<AnimationGroup parentKey="flashAnim" setToFinalAlpha="true">
+			<AnimationGroup name="$parentFlashAnim" parentKey="flashAnim" setToFinalAlpha="true">
 				<Alpha childKey="flash" smoothing="OUT" duration="1" order="1" fromAlpha="1" toAlpha="0"/>
 			</AnimationGroup>
 		</Animations>
@@ -109,24 +109,24 @@
 						</Anchor>
 					</Anchors>
 				</FontString>
-				<Texture parentKey="flash" hidden="false" alpha="0" alphaMode="ADD" atlas="bags-glow-flash" useAtlasSize="true">
+				<Texture name="$parentFlash" parentKey="flash" hidden="false" alpha="0" alphaMode="ADD" atlas="bags-glow-flash" useAtlasSize="true">
 					<Anchors>
 						<Anchor point="CENTER"/>
 					</Anchors>
 				</Texture>
-				<Texture parentKey="NewItemTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-blue" useAtlasSize="true">
+				<Texture name="$parentNewItemTexture" parentKey="NewItemTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-blue" useAtlasSize="true">
 					<Anchors>
 						<Anchor point="CENTER"/>
 					</Anchors>
 				</Texture>
 			</Layer>
 			<Layer level="BACKGROUND" textureSubLevel="-1">
-				<Texture parentKey="TargetTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-purple" useAtlasSize="true">
+				<Texture name="$parentTargetTexture" parentKey="TargetTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-purple" useAtlasSize="true">
 					<Anchors>
 						<Anchor point="CENTER"/>
 					</Anchors>
 				</Texture>
-				<Texture parentKey="FocusTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-white" useAtlasSize="true">
+				<Texture name="$parentFocusTexture" parentKey="FocusTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-white" useAtlasSize="true">
 					<Anchors>
 						<Anchor point="CENTER"/>
 					</Anchors>
@@ -152,7 +152,7 @@
 				local bar = self:GetParent():GetParent()
 				if not bar.settings.tooltips or self:GetAlpha() == 0 then return end
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-				GameTooltip:SetSpellByID(self.spellID)
+				--GameTooltip:SetSpellByID(self.spellID)
 			</OnEnter>
 			<OnLeave>
 				GameTooltip:Hide()
