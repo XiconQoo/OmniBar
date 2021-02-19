@@ -1,53 +1,23 @@
-# OmniBar
+# OmniBar TBC BackPort
+
+### [v10.10-TBC-Release Download Here](https://github.com/XiconQoo/OmniBar/releases/download/v10.10-TBC-Release/OmniBar_v10.10-TBC-Release.zip)
+
+###### <a target="_blank" rel="noopener noreferrer" href="https://www.paypal.me/xiconqoo/10"><img src="../readme-media/Paypal-Donate.png" height="30" style="margin-top:-30px;position:relative;top:20px;"></a> Please consider donating if you like my work
 
 OmniBar is an _extremely lightweight_ addon that tracks enemy cooldowns.
 
-**Open a ticket to report any issues:**
-https://github.com/jordonwow/omnibar/issues
+This is a BackPort of v10.10 Retail (Shadowlands)
 
-**Submit a pull request:**
-https://github.com/jordonwow/omnibar/pulls
+I did not test extensively, only the core functionality. I added all spellIDs myself. If you find anything not working properly, open an issue.
 
-## v10.10
-* Fix Premonition
+## Screenshot
 
-## v10.9
-* Update for Retail 9.0.1
-* Update for Classic 1.13.5
-* Fix bug caused by removed spells
-* Fix Dark Simulacrum
-* Update Gouge cooldown for Classic
-* Add Amplify Curse
-* Add Charge
-* Add Intercept
-* Make font more readable
+![Screenshot](../readme-media/sample.jpg)
 
-## v10.8
-* Update for Classic 1.13.4
+### Changes
 
-## v10.7
-* Update for Classic 1.13.3
+v10.10-TBC-Release
 
-## v10.6
-* Bug fixes
-
-## v10.5
-* Fix Custom Spells
-
-## v10.4
-* Add Earth Shock for Classic
-
-## v10.3
-* Bug fixes
-
-## v10.2
-* Fix Coordinated Assault
-* Fix Divine Favor cooldown
-* Fix Premonition
-
-## v10.1
-* Bug fixes
-
-## v10.0
-* Initial compatibility for Classic
-* Updated for 8.2.5
+- compatible with TBC 2.4.3
+- Ace Libs replaced
+- added TBC spells + ranks (not all tested)

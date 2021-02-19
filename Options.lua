@@ -971,12 +971,6 @@ function OmniBar:SetupOptions()
 		},
 	}
 
-	if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
-		local LibDualSpec = LibStub('LibDualSpec-1.0')
-		LibDualSpec:EnhanceDatabase(self.db, "OmniBarDB")
-		LibDualSpec:EnhanceOptions(self.options.plugins.profiles.profiles, self.db)
-	end
-
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("OmniBar", self.options)
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("OmniBar", "OmniBar")
 	LibStub("AceConsole-3.0"):RegisterChatCommand("omnibar", function() LibStub("AceConfigDialog-3.0"):Open("OmniBar") end)
