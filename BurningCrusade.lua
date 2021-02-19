@@ -1,5 +1,8 @@
+OmniBarAddonName, OmniBarAddonFrame = "OmniBar", CreateFrame("Frame", "OmniBarFrame")
+WOW_PROJECT_TBC = "TBC"
+WOW_PROJECT_ID = "TBC"
 
-if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
+if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then return end
 
 OmniBarAddonFrame.Resets = {
     --[[ Cold Snap

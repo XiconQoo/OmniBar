@@ -115,7 +115,7 @@ function OmniBar:Delete(key, keepProfile)
 	bar:UnregisterEvent("PLAYER_REGEN_DISABLED")
 	bar:UnregisterEvent("UPDATE_BATTLEFIELD_SCORE")
 	bar:UnregisterEvent("UPDATE_BATTLEFIELD_STATUS")
-	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+	if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
 		bar:UnregisterEvent("PLAYER_FOCUS_CHANGED")
 		bar:UnregisterEvent("ARENA_OPPONENT_UPDATE")
 		bar:UnregisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
@@ -160,7 +160,7 @@ end
 
 -- create a lookup table since CombatLogGetCurrentEventInfo() returns 0 for spellId
 local spellIdByName
-if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+if WOW_PROJECT_ID == WOW_PROJECT_TBC then
 	spellIdByName = {}
 	for id, value in pairs(cooldowns) do
 		if not value.parent then spellIdByName[GetSpellInfo(id)] = id end
@@ -250,7 +250,7 @@ function OmniBar:Initialize(key, name)
 	f:RegisterEvent("PLAYER_REGEN_DISABLED")
 	f:RegisterEvent("CHAT_MSG_ADDON")
 
-	if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+	if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
 		f:RegisterEvent("PLAYER_FOCUS_CHANGED")
 		f:RegisterEvent("ARENA_OPPONENT_UPDATE")
 		f:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
@@ -300,7 +300,7 @@ local Masque = LibStub and LibStub("Masque", true)
 
 -- create a lookup table to translate spec names into IDs
 local specNames = {}
-if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
 	for classID = 1, MAX_CLASSES do
 		local _, classToken = GetClassInfo(classID)
 		specNames[classToken] = {}
@@ -428,7 +428,7 @@ function OmniBar_UpdateBorders(self)
 	end
 end
 
-function OmniBar_UpdateArenaSpecs(self)
+--[[function OmniBar_UpdateArenaSpecs(self)
 	if self.zone ~= "arena" then return end
 	for i = 1, 5 do
 		local specID = GetArenaOpponentSpec(i)
@@ -437,7 +437,7 @@ function OmniBar_UpdateArenaSpecs(self)
 			if name then self.specs[name] = specID end
 		end
 	end
-end
+end--]]
 
 function OmniBar_SetZone(self, refresh)
 	local disabled = self.disabled
@@ -478,7 +478,7 @@ function OmniBar_OnEvent(self, event, ...)
 		if (eventType == "SPELL_CAST_SUCCESS" or eventType == "SPELL_AURA_APPLIED") and bit.band(sourceFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) ~= 0 then
 			if spellID == 0 and spellIdByName then spellID = spellIdByName[spellName] end
 			if cooldowns[spellID] then
-				OmniBar_UpdateArenaSpecs(self)
+				--OmniBar_UpdateArenaSpecs(self)
 				OmniBar_AddIcon(self, spellID, sourceGUID, sourceName)
 			end
 
@@ -560,7 +560,7 @@ function OmniBar_OnEvent(self, event, ...)
 		local prefix, message, channel, sender = ...
 		if prefix == "GladdyTrinketUsed" and sender ~= UnitName("player") then
 			if cooldowns[42292] then
-				OmniBar_UpdateArenaSpecs(self)
+				--OmniBar_UpdateArenaSpecs(self)
 				OmniBar_AddIcon(self, 42292, message, "Unknown Source")
 			end
 		end
@@ -999,11 +999,4 @@ function OmniBar:Test()
 	for key,_ in pairs(self.db.profile.bars) do
 		OmniBar_Test(_G[key])
 	end
-end
-
-SLASH_OmniBar1 = "/ob"
-SLASH_OmniBar2 = "/omnibar"
-SlashCmdList.OmniBar = function()
-	InterfaceOptionsFrame_OpenToCategory("OmniBar")
-	InterfaceOptionsFrame_OpenToCategory("OmniBar")
 end

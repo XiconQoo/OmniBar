@@ -23,7 +23,6 @@ Libs\AceLocale-3.0\AceLocale-3.0.xml
 
 Locales\Locales.xml
 OmniBar.xml
-Retail.lua
-Classic.lua
+BurningCrusade.lua
 OmniBar.lua
 Options.lua
