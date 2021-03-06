@@ -663,13 +663,13 @@ function OmniBar_CooldownFinish(self, force)
 
 	local bar = icon:GetParent():GetParent()
 
-	local flash = icon.flashAnim
+	--local flash = icon.flashAnim
 	local newItemGlowAnim = icon.newitemglowAnim
 
-	if flash:IsPlaying() or newItemGlowAnim:IsPlaying() then
-		flash:Stop()
-		newItemGlowAnim:Stop()
-	end
+	--if flash:IsPlaying() or newItemGlowAnim:IsPlaying() then
+	--	flash:Stop()
+	--	newItemGlowAnim:Stop()
+	--end
 
 	if not bar.settings.showUnused then
 		icon:Hide()
@@ -805,7 +805,7 @@ function OmniBar_AddIcon(self, spellID, sourceGUID, sourceName, init, test, spec
 			icon.charges = charges
 			icon.Count:SetText(charges)
 			if self.settings.glow then
-				icon.flashAnim:Play()
+				--icon.flashAnim:Play()
 				icon.newitemglowAnim:Play()
 			end
 			return icon

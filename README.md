@@ -1,6 +1,6 @@
 # OmniBar TBC BackPort
 
-### [v10.10-TBC-Release Download Here](https://github.com/XiconQoo/OmniBar/releases/download/v10.10-TBC-Release/OmniBar_v10.10-TBC-Release.zip)
+### [v10.11-TBC-Release Download Here](https://github.com/XiconQoo/OmniBar/releases/download/v10.11-TBC-Release/OmniBar_v10.11-TBC-Release.zip)
 
 ###### <a target="_blank" rel="noopener noreferrer" href="https://www.paypal.me/xiconqoo/10"><img src="../readme-media/Paypal-Donate.png" height="30" style="margin-top:-30px;position:relative;top:20px;"></a> Please consider donating if you like my work
 
@@ -15,6 +15,9 @@ I did not test extensively, only the core functionality. I added all spellIDs my
 ![Screenshot](../readme-media/sample.jpg)
 
 ### Changes
+
+v10.11-TBC-Release
+- remove flash animation
 
 v10.10-TBC-Release
 
