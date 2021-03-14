@@ -363,10 +363,10 @@ local function SpellBelongsToSpec(spellID, specID)
 	return false
 end
 
-function OmniBar_AddIconsByClass(self, class, sourceGUID, specID)
+function OmniBar_AddIconsByClass(self, class, sourceGUID, specID, sourceName)
 	for spellID, spell in pairs(cooldowns) do
 		if OmniBar_IsSpellEnabled(self, spellID) and spell.class == class and SpellBelongsToSpec(spellID, specID) then
-			OmniBar_AddIcon(self, spellID, sourceGUID, nil, true, nil, specID)
+			OmniBar_AddIcon(self, spellID, sourceGUID, sourceName, true, nil, specID)
 		end
 	end
 end
@@ -553,7 +553,7 @@ function OmniBar_OnEvent(self, event, ...)
 			if class then
 				if self.detected[guid] then return end
 				self.detected[guid] = class
-				OmniBar_AddIconsByClass(self, class)
+				OmniBar_AddIconsByClass(self, class, nil, nil, UnitName(unit))
 			end
 		end
 	elseif event == "CHAT_MSG_ADDON" then
@@ -818,7 +818,7 @@ function OmniBar_AddIcon(self, spellID, sourceGUID, sourceName, init, test, spec
 		icon.Count:SetText(nil)
 	end
 
-	local name = self.settings.names and sourceGUID and type(sourceGUID) == "string" and select(6, GetPlayerInfoByGUID(sourceGUID))
+	local name = self.settings.names and sourceName or ""
 	if test and self.settings.names then name = "Name" end
 	icon.Name:SetText(name)
 
