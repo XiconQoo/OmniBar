@@ -248,10 +248,11 @@ function OmniBar:Initialize(key, name)
 	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	f:RegisterEvent("PLAYER_TARGET_CHANGED")
 	f:RegisterEvent("PLAYER_REGEN_DISABLED")
+	f:RegisterEvent("PLAYER_FOCUS_CHANGED")
 	f:RegisterEvent("CHAT_MSG_ADDON")
 
 	if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
-		f:RegisterEvent("PLAYER_FOCUS_CHANGED")
+
 		f:RegisterEvent("ARENA_OPPONENT_UPDATE")
 		f:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
 	end
@@ -819,7 +820,7 @@ function OmniBar_AddIcon(self, spellID, sourceGUID, sourceName, init, test, spec
 			icon.Count:SetText(charges)
 			if self.settings.glow then
 				--icon.flashAnim:Play()
-				icon.newitemglowAnim:Play()
+				--icon.newitemglowAnim:Play()
 			end
 			return icon
 		end
@@ -932,7 +933,7 @@ function OmniBar_Test(self)
 	self.disabled = nil
 	OmniBar_RefreshIcons(self)
 	for k,v in pairs(cooldowns) do
-		OmniBar_AddIcon(self, k, nil, nil, nil, true)
+		OmniBar_AddIcon(self, k, math.random(5,30), nil, nil, true)
 	end
 end
 
