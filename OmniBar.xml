@@ -120,13 +120,13 @@
 					</Anchors>
 				</Texture>
 			</Layer>
-			<Layer level="BACKGROUND" textureSubLevel="-1">
-				<Texture name="$parentTargetTexture" parentKey="TargetTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-purple" useAtlasSize="true">
+			<Layer level="BACKGROUND" >
+				<Texture name="$parentTargetTexture" parentKey="TargetTexture" alpha="0" alphaMode="ADD" file="Interface\Buttons\UI-ActionButton-Border">
 					<Anchors>
 						<Anchor point="CENTER"/>
 					</Anchors>
 				</Texture>
-				<Texture name="$parentFocusTexture" parentKey="FocusTexture" alpha="0" alphaMode="ADD" atlas="bags-glow-white" useAtlasSize="true">
+				<Texture name="$parentFocusTexture" parentKey="FocusTexture" alpha="0" alphaMode="ADD" file="Interface\Buttons\UI-ActionButton-Border">
 					<Anchors>
 						<Anchor point="CENTER"/>
 					</Anchors>

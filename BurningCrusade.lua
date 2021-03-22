@@ -7,14 +7,14 @@ if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then return end
 OmniBarAddonFrame.Resets = {
     --[[ Cold Snap
         - Frost Nova
-        - Fire Ward
         - Frost Ward
+        - Cone of Cold
         - Ice Barrier
         - Ice Block
         - Icy Veins
         - Summon Water Elemental
       ]]
-    [11958] = {122,543,6143, 11426,45438,12472,31687},
+    [11958] = {122,6143,120,11426,45438,12472,31687},
 
     --[[ Preparation
         - Evasion
@@ -24,7 +24,7 @@ OmniBarAddonFrame.Resets = {
 		- Shadowstep
 		- Premeditation (not trackable)
       ]]
-    [14185] = { 5277, 2983, 1856, 14177, 36554,14183 },
+    [14185] = { 26669, 2983, 26889, 14177, 36554, 14183},
 
     --[[ Readiness
         - Bestial Wrath
@@ -321,6 +321,12 @@ OmniBarAddonFrame.Cooldowns = {
         [33041] = { parent = 31661 },
         [33042] = { parent = 31661 },
         [33043] = { parent = 31661 },
+    [120] = {class = "MAGE", duration = 8}, --Cone of Cold
+        [8492] = { parent = 120 },
+        [10159] = { parent = 120 },
+        [10160] = { parent = 120 },
+        [10161] = { parent = 120 },
+        [27087] = { parent = 120 },
 
     -- Rogue
 

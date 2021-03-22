@@ -248,10 +248,11 @@ function OmniBar:Initialize(key, name)
 	f:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	f:RegisterEvent("PLAYER_TARGET_CHANGED")
 	f:RegisterEvent("PLAYER_REGEN_DISABLED")
+	f:RegisterEvent("PLAYER_FOCUS_CHANGED")
 	f:RegisterEvent("CHAT_MSG_ADDON")
 
 	if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
-		f:RegisterEvent("PLAYER_FOCUS_CHANGED")
+
 		f:RegisterEvent("ARENA_OPPONENT_UPDATE")
 		f:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
 	end
@@ -336,8 +337,6 @@ function OmniBar_CreateIcon(self)
 	local f = _G[key] or CreateFrame("Button", key, _G[name.."Icons"], "OmniBarButtonTemplate")
 	if not f.NormalTexture then f.NormalTexture = getglobal(key.."NormalTexture") end
 	if not f.flash then f.flash = getglobal(key.."Flash") end
-	if not f.TargetTexture then f.TargetTexture = getglobal(key.."TargetTexture") end
-	if not f.FocusTexture then f.FocusTexture = getglobal(key.."FocusTexture") end
 	if not f.NewItemTexture then f.NewItemTexture = getglobal(key.."NewItemTexture") end
 	if not f.Name then f.Name = getglobal(key.."Name") end
 	if not f.cooldown then f.cooldown = getglobal(key.."Cooldown") end
@@ -349,6 +348,20 @@ function OmniBar_CreateIcon(self)
 		f.Count = f:CreateFontString(nil, "OVERLAY")
 		f.Count:SetAllPoints(f)
 		f.Count:SetFont("Fonts\\ARIALN.ttf", 10, "OUTLINE")
+	end
+	if not f.TargetTexture then
+		f.TargetTexture = getglobal(key.."TargetTexture")
+		f.TargetTexture:ClearAllPoints()
+		f.TargetTexture:SetPoint("TOPLEFT", f.icon, "TOPLEFT", -18, 18)
+		f.TargetTexture:SetPoint("BOTTOMRIGHT", f.icon, "BOTTOMRIGHT", 18, -18)
+		f.TargetTexture:SetVertexColor(0.15, 0.5, 1)
+	end
+	if not f.FocusTexture then
+		f.FocusTexture = getglobal(key.."FocusTexture")
+		f.FocusTexture:ClearAllPoints()
+		f.FocusTexture:SetPoint("TOPLEFT", f.icon, "TOPLEFT", -18, 18)
+		f.FocusTexture:SetPoint("BOTTOMRIGHT", f.icon, "BOTTOMRIGHT", 18, -18)
+		f.FocusTexture:SetVertexColor(0.5, 0.15, 1)
 	end
 
 	table.insert(self.icons, f)
@@ -384,6 +397,8 @@ function OmniBar_UpdateBorders(self)
 	for i = 1, #self.active do
 		local border
 		local guid = self.active[i].sourceGUID
+		local classFocus = select(2, UnitClass("focus"))
+		local classTarget = select(2, UnitClass("target"))
 		if guid then
 			if self.settings.highlightFocus and IconIsSource(guid, UnitGUID("focus")) then
 				self.active[i].FocusTexture:SetAlpha(1)
@@ -399,15 +414,13 @@ function OmniBar_UpdateBorders(self)
 				self.active[i].TargetTexture:SetAlpha(0)
 			end
 		else
-			local class = select(2, UnitClass("focus"))
-			if self.settings.highlightFocus and class and IsHostilePlayer("focus") and class == self.active[i].class then
+			if self.settings.highlightFocus and classFocus and IsHostilePlayer("focus") and classFocus == self.active[i].class then
 				self.active[i].FocusTexture:SetAlpha(1)
 				border = true
 			else
 				self.active[i].FocusTexture:SetAlpha(0)
 			end
-			class = select(2, UnitClass("target"))
-			if self.settings.highlightTarget and class and IsHostilePlayer("target") and class == self.active[i].class then
+			if self.settings.highlightTarget and classTarget and IsHostilePlayer("target") and classTarget == self.active[i].class then
 				self.active[i].FocusTexture:SetAlpha(0)
 				self.active[i].TargetTexture:SetAlpha(1)
 				border = true
@@ -491,7 +504,7 @@ function OmniBar_OnEvent(self, event, ...)
 							if resets[spellID][j] == self.active[i].spellID then
 								self.active[i].cooldown:Hide()
 								OmniBar_CooldownFinish(self.active[i].cooldown, true)
-								return
+								break
 							end
 						end
 					end
@@ -680,6 +693,7 @@ function OmniBar_CooldownFinish(self, force)
 				icon:SetAlpha(bar.settings.unusedAlpha)
 		end
 	end
+	icon.cooldown.finish = GetTime()
 	bar:StopMovingOrSizing()
 	OmniBar_Position(bar)
 end
@@ -806,7 +820,7 @@ function OmniBar_AddIcon(self, spellID, sourceGUID, sourceName, init, test, spec
 			icon.Count:SetText(charges)
 			if self.settings.glow then
 				--icon.flashAnim:Play()
-				icon.newitemglowAnim:Play()
+				--icon.newitemglowAnim:Play()
 			end
 			return icon
 		end
@@ -919,7 +933,7 @@ function OmniBar_Test(self)
 	self.disabled = nil
 	OmniBar_RefreshIcons(self)
 	for k,v in pairs(cooldowns) do
-		OmniBar_AddIcon(self, k, nil, nil, nil, true)
+		OmniBar_AddIcon(self, k, math.random(5,30), nil, nil, true)
 	end
 end
 

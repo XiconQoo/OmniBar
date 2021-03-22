@@ -1,6 +1,6 @@
 # OmniBar TBC BackPort
 
-### [v10.12-TBC-Release Download Here](https://github.com/XiconQoo/OmniBar/releases/download/v10.12-TBC-Release/OmniBar_v10.12-TBC-Release.zip)
+### [v10.13-TBC-Release Download Here](https://github.com/XiconQoo/OmniBar/releases/download/v10.13-TBC-Release/OmniBar_v10.13-TBC-Release.zip)
 
 ###### <a target="_blank" rel="noopener noreferrer" href="https://www.paypal.me/xiconqoo/10"><img src="../readme-media/Paypal-Donate.png" height="30" style="margin-top:-30px;position:relative;top:20px;"></a> Please consider donating if you like my work
 
@@ -15,6 +15,10 @@ I did not test extensively, only the core functionality. I added all spellIDs my
 ![Screenshot](../readme-media/sample.jpg)
 
 ### Changes
+
+v10.13-TBC-Release
+- fix cooldown reset
+- add borders for target/focus
 
 v10.12-TBC-Release
 - fixed unit name option

@@ -255,6 +255,13 @@ function OmniBar:AddBarToOptions(key, refresh)
 						type = "toggle",
 						order = 9,
 					},
+					highlightFocus = {
+						name = L["Highlight Focus"],
+						desc = L["Draw a border around your focus"],
+						width = "normal",
+						type = "toggle",
+						order = 10,
+					},
 					names = {
 						name = L["Show Names"],
 						desc = L["Show the player name of the spell"],
@@ -597,13 +604,6 @@ function OmniBar:AddBarToOptions(key, refresh)
 	}
 
 	if WOW_PROJECT_ID ~= WOW_PROJECT_TBC then
-		self.options.args.bars.args[key].args.settings.args.highlightFocus = {
-			name = L["Highlight Focus"],
-			desc = L["Draw a border around your focus"],
-			width = "normal",
-			type = "toggle",
-			order = 10,
-		}
 
 		self.options.args.bars.args[key].args.visibility.args.arena = {
 			name = L["Show in Arena"],
