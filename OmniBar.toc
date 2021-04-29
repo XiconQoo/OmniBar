@@ -1,7 +1,7 @@
 ## Interface: 20400
 ## Title: OmniBar-TBC
 ## Notes: Tracks enemy cooldowns
-## Version: v10.13-TBC
+## Version: v10.14-TBC
 ## Author: Jordon
 ## DefaultState: Enabled
 ## SavedVariables: OmniBarDB

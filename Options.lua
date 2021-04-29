@@ -36,8 +36,8 @@ StaticPopupDialogs["OMNIBAR_DELETE"] = {
 	text = DELETE.." \"%s\"",
 	button1 = YES,
 	button2 = NO,
-	OnAccept = function(self, data)
-		OmniBar:Delete(data)
+	OnAccept = function(self)
+		OmniBar:Delete(self)
 	end,
 	timeout = 0,
 	whileDead = true,
